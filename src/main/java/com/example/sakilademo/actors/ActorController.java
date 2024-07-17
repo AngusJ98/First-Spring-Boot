@@ -1,13 +1,12 @@
-package com.example.sakilademo;
+package com.example.sakilademo.actors;
 
-import jakarta.validation.constraints.Null;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class ActorController {
@@ -32,12 +31,7 @@ public class ActorController {
 
     @GetMapping("/actor/{id}")
     public Actor getActorById(@PathVariable short id){
-        Actor actor = actorRepository.findById(id);
-        if (actor != null) {
-            return (actor);
-        } else {
-            return null;
-        }
+        return (actorRepository.findById(id));
     }
 
     @GetMapping("/actor/")
@@ -69,8 +63,29 @@ public class ActorController {
     }
 
     @PostMapping("/actor/")
-    public ResponseEntity<Actor> newActor(@PathVariable short id, @RequestBody Actor actor) {
+    public ResponseEntity<Actor> newActor(@RequestBody Actor actor) {
         return ResponseEntity.ok(actorRepository.save(actor));
+    }
+
+    @PatchMapping("/actor/{id}")
+    public  ResponseEntity<Actor> patchActor(@PathVariable short id, @RequestBody Map<String, String> newData) {
+        Actor actor = actorRepository.findById(id);
+        if (actor != null) {
+            newData.forEach((a, b) -> {
+                switch (a) {
+                    case "firstName":
+                        actor.setFirstName(b);
+                        break;
+                    case "lastName":
+                        actor.setLastName(b);
+                        break;
+                }
+            });
+
+            return ResponseEntity.ok(actorRepository.save(actor));
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
 
