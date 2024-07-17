@@ -1,10 +1,13 @@
 package com.example.sakilademo.actors;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 
@@ -49,8 +52,7 @@ public class ActorController {
     public ResponseEntity<Actor> updateActor(@PathVariable short id, @RequestBody Actor actor) {
         Actor exist = actorRepository.findById(id);
         if (exist != null) {
-            exist.setFirstName(actor.getFirstName());
-            exist.setLastName(actor.getLastName());
+            BeanUtils.copyProperties(actor, exist);
             return ResponseEntity.ok(actorRepository.save(exist));
         } else {
             return ResponseEntity.notFound().build();
@@ -67,13 +69,12 @@ public class ActorController {
         Actor actor = actorRepository.findById(id);
         if (actor != null) {
             newData.forEach((a, b) -> {
-                switch (a) {
-                    case "firstName":
-                        actor.setFirstName(b);
-                        break;
-                    case "lastName":
-                        actor.setLastName(b);
-                        break;
+                try {
+                    Field field = ReflectionUtils.findField(Actor.class, a);
+                    field.setAccessible(true);
+                    ReflectionUtils.setField(field, actor, b);
+                } catch (Exception e){
+                    System.out.println("Field not found: " + a);
                 }
             });
 

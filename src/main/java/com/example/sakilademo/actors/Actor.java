@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 @Entity
 @Getter @Setter
@@ -25,12 +26,12 @@ public class Actor {
 
 
     Actor() {
-        this.lastUpdate = LocalDateTime.now();
+        this.lastUpdate = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
     }
 
     @PreUpdate
     protected void onUpdate() {
-        lastUpdate = LocalDateTime.now();
+        this.lastUpdate = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
     }
 }
 
