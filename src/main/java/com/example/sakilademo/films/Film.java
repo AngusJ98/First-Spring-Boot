@@ -17,10 +17,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.Year;
 import java.time.temporal.ChronoUnit;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Getter
@@ -82,8 +79,9 @@ public class Film {
     @Column(name = "rating")
     private Rating rating;
 
+    @Convert(converter = SpecialFeaturesConverter.class)
     @Column(name = "special_features")
-    private String specialFeatures;
+    private List<SpecialFeature> specialFeatures;
 
     @NotNull
     @Column(name = "last_update")
@@ -94,6 +92,24 @@ public class Film {
         this.lastUpdate = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
     }
 
+    @Override
+    public String toString() {
+        return "Film{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", releaseYear=" + releaseYear +
+                ", languageid=" + languageid +
+                ", originalLanguageid=" + originalLanguageid +
+                ", rentalDuration=" + rentalDuration +
+                ", rentalRate=" + rentalRate +
+                ", length=" + length +
+                ", replacementCost=" + replacementCost +
+                ", rating=" + rating +
+                ", specialFeatures=" + specialFeatures +
+                ", lastUpdate=" + lastUpdate +
+                '}';
+    }
 }
 
 

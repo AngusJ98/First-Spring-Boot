@@ -3,6 +3,8 @@ package com.example.sakilademo.films;
 import com.example.sakilademo.films.Film;
 import com.example.sakilademo.films.FilmRepository;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
@@ -10,7 +12,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 
@@ -43,10 +48,15 @@ public class FilmController {
 
     @PutMapping("/film/{id}")
     public ResponseEntity<Film> updateFilm(@PathVariable short id, @RequestBody Film film) {
+
         Film exist =filmRepository.findById(id);
         if (exist != null) {
-            BeanUtils.copyProperties(film, exist);
-            return ResponseEntity.ok(filmRepository.save(exist));
+            try {
+                BeanUtils.copyProperties(film, exist);
+                return ResponseEntity.ok(filmRepository.save(exist));
+            } catch (IllegalArgumentException e) {
+                return ResponseEntity.badRequest().build();
+            }
         } else {
             return ResponseEntity.notFound().build();
         }
@@ -58,20 +68,36 @@ public class FilmController {
     }
 
     @PatchMapping("/film/{id}")
-    public  ResponseEntity<Film> patchFilm(@PathVariable short id, @RequestBody Film newData) {
+    public  ResponseEntity<Film> patchFilm(@PathVariable short id, @RequestBody Map<String, Object> newData) {
 
         Film film = filmRepository.findById(id);
+
         if (film != null ) {
             try {
-                BeanUtils.copyProperties(film, newData);
-
+                BeanWrapper wrap = new BeanWrapperImpl(film);
+                newData.forEach((a, b) -> {
+                    PropertyDescriptor pd = wrap.getPropertyDescriptor(a);
+                    Method writeMethod = pd.getWriteMethod();
+                    if (writeMethod != null) {
+                        //do the writing
+                        wrap.setPropertyValue(a, b);
+                        //ReflectionUtils.makeAccessible(writeMethod);
+                        //writeMethod.invoke(film, b);
+                    } else {
+                        throw new IllegalArgumentException("Attribute invalid");
+                    }
+                });
             } catch (Exception e) {
-                e.printStackTrace();
+
             }
+
             return ResponseEntity.ok(filmRepository.save(film));
         } else {
             return ResponseEntity.notFound().build();
         }
     }
+
+
+
 
 }
