@@ -14,11 +14,6 @@ public class ActorController {
     @Autowired
     private ActorRepository actorRepository;
 
-    public List<Actor> readAll() {
-        return actorRepository.findAll();
-    }
-
-
 
     public List<Actor> findByFirstName(String firstName) {
         return actorRepository.findAllByFirstNameContainsIgnoreCase(firstName);
