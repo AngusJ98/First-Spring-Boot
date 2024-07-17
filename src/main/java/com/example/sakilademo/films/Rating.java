@@ -1,6 +1,6 @@
 package com.example.sakilademo.films;
 
-enum Rating {
+public enum Rating {
     G,
     PG,
     PG_13,
