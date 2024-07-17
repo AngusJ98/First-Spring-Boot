@@ -73,23 +73,26 @@ public class FilmController {
         Film film = filmRepository.findById(id);
 
         if (film != null ) {
-            try {
-                BeanWrapper wrap = new BeanWrapperImpl(film);
-                newData.forEach((a, b) -> {
+
+            //what is a bean
+            //what is a bean wrapper
+            //All I know is that this works
+            BeanWrapper wrap = new BeanWrapperImpl(film);
+
+            newData.forEach((a, b) -> {
+                try {
                     PropertyDescriptor pd = wrap.getPropertyDescriptor(a);
-                    Method writeMethod = pd.getWriteMethod();
-                    if (writeMethod != null) {
-                        //do the writing
+                    //Method writeMethod = pd.getWriteMethod();
+                    //do the writing
+                    if (pd.getWriteMethod() != null) {
                         wrap.setPropertyValue(a, b);
                         //ReflectionUtils.makeAccessible(writeMethod);
                         //writeMethod.invoke(film, b);
-                    } else {
-                        throw new IllegalArgumentException("Attribute invalid");
                     }
-                });
-            } catch (Exception e) {
-
-            }
+                } catch (Exception e) {
+                    throw new IllegalArgumentException("Either the key or value were invalid");
+                }
+            });
 
             return ResponseEntity.ok(filmRepository.save(film));
         } else {
