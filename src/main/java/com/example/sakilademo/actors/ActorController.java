@@ -50,6 +50,7 @@ public class ActorController {
 
     @PutMapping("/actor/{id}")
     public ResponseEntity<Actor> updateActor(@PathVariable short id, @RequestBody Actor actor) {
+        actor.setId(id);
         Actor exist = actorRepository.findById(id);
         if (exist != null) {
             BeanUtils.copyProperties(actor, exist);

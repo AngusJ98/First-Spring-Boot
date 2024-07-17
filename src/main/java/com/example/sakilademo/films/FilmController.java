@@ -1,13 +1,16 @@
 package com.example.sakilademo.films;
 
+import com.example.sakilademo.actors.Actor;
 import com.example.sakilademo.films.Film;
 import com.example.sakilademo.films.FilmRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 
@@ -24,7 +27,7 @@ public class FilmController {
 
     @GetMapping("/film/")
     public List<Film> getFilms() {
-        returnfilmRepository.findAll();
+        return filmRepository.findAll();
     }
 
     @DeleteMapping("/film/{id}")
@@ -40,6 +43,7 @@ public class FilmController {
 
     @PutMapping("/film/{id}")
     public ResponseEntity<Film> updateFilm(@PathVariable short id, @RequestBody Film film) {
+        film.setId(id);
         Film exist =filmRepository.findById(id);
         if (exist != null) {
             BeanUtils.copyProperties(film, exist);
@@ -59,13 +63,12 @@ public class FilmController {
         Film film = filmRepository.findById(id);
         if (film != null) {
             newData.forEach((a, b) -> {
-                switch (a) {
-                    case "firstName":
-                       film.setFirstName(b);
-                        break;
-                    case "lastName":
-                       film.setLastName(b);
-                        break;
+                try {
+                    Field field = ReflectionUtils.findField(Actor.class, a);
+                    field.setAccessible(true);
+                    ReflectionUtils.setField(field, film, b);
+                } catch (Exception e){
+                    System.out.println("Field not found: " + a);
                 }
             });
 
