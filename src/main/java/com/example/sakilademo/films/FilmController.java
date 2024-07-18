@@ -2,6 +2,7 @@ package com.example.sakilademo.films;
 
 import com.example.sakilademo.films.Film;
 import com.example.sakilademo.films.FilmRepository;
+import com.example.sakilademo.validation.ValidationGroup;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
@@ -48,7 +49,7 @@ public class FilmController {
     }
 
     @PutMapping("/film/{id}")
-    public ResponseEntity<Film> updateFilm(@PathVariable short id, @RequestBody Film film) {
+    public ResponseEntity<Film> updateFilm(@PathVariable short id, @Validated(ValidationGroup.Create.class) @RequestBody Film film) {
 
         Film exist =filmRepository.findById(id);
         if (exist != null) {

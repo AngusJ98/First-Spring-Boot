@@ -32,14 +32,13 @@ public class Film {
     }
 
     @Id
-    @Unsigned
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Setter(AccessLevel.NONE)
-    @NotNull
+
     @Column(name = "film_id")
     private short id;
 
-    @NotNull
+
     @Column(name = "title")
     private String title;
 
@@ -50,23 +49,23 @@ public class Film {
     @Column(name = "release_year")
     private Year releaseYear;
 
-    @NotNull
-    @Unsigned
+    //private short languageId;
+
+
+
     @ManyToOne
     @JoinColumn (name = "language_id")
     private Language language;
 
-    @Unsigned
-    @Nullable
+
     @Column(name = "original_language_id")
     private Short originalLanguageid;
 
-    @NotNull
-    @Unsigned
+
     @Column(name = "rental_duration")
     private short rentalDuration;
 
-    @NotNull
+
     @Column(name = "rental_rate")
     private BigDecimal rentalRate;
 
@@ -74,7 +73,7 @@ public class Film {
     @Column(name = "length")
     private Short length;
 
-    @NotNull
+
     @Column(name = "replacement_cost")
     private BigDecimal replacementCost;
 

@@ -1,27 +1,21 @@
 package com.example.sakilademo.actors;
 
-import java.util.Optional.*;
+import com.example.sakilademo.validation.ValidationGroup;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.ReflectionUtils;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.lang.reflect.Field;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 public class ActorController {
 
     @Autowired
-    private ActorRepository actorRepository;
+    private ActorService actorService;
 
-
-    public List<Actor> findByFirstName(String firstName) {
-        return actorRepository.findAllByFirstNameContainsIgnoreCase(firstName);
-    }
 
     @GetMapping("/greeting")
     public String sayHi() {
@@ -29,61 +23,33 @@ public class ActorController {
     }
 
     @GetMapping("/actor/{id}")
-    public ActorResponse getActorById(@PathVariable short id){
-        return (new ActorResponse(actorRepository.findById(id)));
+    public ResponseEntity<ActorResponse> getActorById(@PathVariable short id){
+        return (actorService.getOneActor(id));
     }
 
     @GetMapping("/actor/")
-    public List<ActorResponse> getActors() {
-        return actorRepository.findAll().stream().map(ActorResponse::new).toList();
+    public ResponseEntity<List<ActorResponse>> getActors() {
+        return actorService.getAllActors();
     }
 
     @DeleteMapping("/actor/{id}")
     public ResponseEntity<HttpStatus> deleteActor(@PathVariable short id) {
-        try {
-           actorRepository.deleteById(id);
-           return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return actorService.deleteActor(id);
     }
 
     @PutMapping("/actor/{id}")
-    public ResponseEntity<Actor> updateActor(@PathVariable short id, @RequestBody Actor actor) {
-        actor.setId(id);
-        Actor exist = actorRepository.findById(id);
-        if (exist != null) {
-            BeanUtils.copyProperties(actor, exist);
-            return ResponseEntity.ok(actorRepository.save(exist));
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public  ResponseEntity<Actor> updateActor(@PathVariable short id, @Validated(ValidationGroup.Create.class) @RequestBody ActorInput input) {
+        return actorService.updateActor(input, id);
     }
 
     @PostMapping("/actor/")
-    public ResponseEntity<Actor> newActor(@RequestBody Actor actor) {
-        return ResponseEntity.ok(actorRepository.save(actor));
+    public ResponseEntity<Actor> newActor(@RequestBody @Validated(ValidationGroup.Create.class) ActorInput input) {
+        return actorService.createActor(input);
     }
 
     @PatchMapping("/actor/{id}")
-    public  ResponseEntity<Actor> patchActor(@PathVariable short id, @RequestBody Map<String, String> newData) {
-        Actor actor = actorRepository.findById(id);
-        if (actor != null) {
-            newData.forEach((a, b) -> {
-                try {
-                    Field field = ReflectionUtils.findField(Actor.class, a);
-                    field.setAccessible(true);
-                    ReflectionUtils.setField(field, actor, b);
-                } catch (Exception e){
-                    System.out.println("Field not found: " + a);
-                }
-            });
-
-            return ResponseEntity.ok(actorRepository.save(actor));
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public  ResponseEntity<Actor> patchActor(@PathVariable short id, @RequestBody @Validated(ValidationGroup.Update.class) ActorInput newData) {
+        return actorService.updateActor(newData, id);
     }
 
 
