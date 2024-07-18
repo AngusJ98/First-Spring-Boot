@@ -3,17 +3,11 @@ package com.example.sakilademo.films;
 
 import com.example.sakilademo.actors.Actor;
 import com.example.sakilademo.language.Language;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Null;
 import jdk.jfr.Unsigned;
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Comment;
-import org.hibernate.annotations.Target;
 import org.springframework.beans.BeanUtils;
 
 import java.math.BigDecimal;
@@ -59,8 +53,9 @@ public class Film {
     private Language language;
 
 
-    @Column(name = "original_language_id")
-    private Short originalLanguageid;
+    @ManyToOne
+    @JoinColumn(name = "original_language_id")
+    private Language originalLanguage;
 
 
     @Column(name = "rental_duration")
@@ -100,6 +95,8 @@ public class Film {
 
     public Film (FilmInput data) {
         BeanUtils.copyProperties(data, this);
+        this.lastUpdate = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+
     }
 
     @Override
@@ -110,7 +107,7 @@ public class Film {
                 ", description='" + description + '\'' +
                 ", releaseYear=" + releaseYear +
                 ", languageid=" + language +
-                ", originalLanguageid=" + originalLanguageid +
+                ", originalLanguageid=" + originalLanguage +
                 ", rentalDuration=" + rentalDuration +
                 ", rentalRate=" + rentalRate +
                 ", length=" + length +

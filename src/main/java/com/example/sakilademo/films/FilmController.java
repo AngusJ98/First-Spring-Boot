@@ -28,8 +28,8 @@ public class FilmController {
     }
 
     @PostMapping
-    public ResponseEntity<FilmResponse> createFilm(FilmInput data) {
-        return filmService.createFilm(data);
+    public ResponseEntity<FilmResponse> createFilm(@RequestBody @Validated(ValidationGroup.Create.class) FilmInput input) {
+        return filmService.createFilm(input);
     }
 
     @DeleteMapping("/{id}")

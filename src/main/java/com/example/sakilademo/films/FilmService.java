@@ -1,6 +1,8 @@
 package com.example.sakilademo.films;
 
 
+import com.example.sakilademo.language.Language;
+import com.example.sakilademo.language.LanguageRepository;
 import com.example.sakilademo.validation.ValidationGroup;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
@@ -17,6 +19,7 @@ import java.beans.PropertyDescriptor;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -24,6 +27,9 @@ public class FilmService {
 
     @Autowired
     private FilmRepository filmRepository;
+
+    @Autowired
+    private LanguageRepository languageRepository;
 
     public ResponseEntity<FilmResponse> getFilmById(short id){
         Film film = filmRepository.findById(id);
@@ -70,6 +76,12 @@ public class FilmService {
 
 
     public ResponseEntity<FilmResponse> createFilm(@RequestBody @Validated(ValidationGroup.Create.class) FilmInput filmData) {
+        Language language = languageRepository.findById(filmData.getLanguageId()).orElseThrow(() -> new IllegalArgumentException("Language ID invalid"));
+        filmData.setLanguage(language);
+        if (filmData.getOriginalLanguageId() != null) {
+            Language originalLanguage = languageRepository.findById(filmData.getOriginalLanguageId()).orElseThrow(() -> new IllegalArgumentException("Original language ID invalid"));
+            filmData.setOriginalLanguage(originalLanguage);
+        }
         return ResponseEntity.ok(new FilmResponse(filmRepository.save(new Film(filmData))));
     }
 

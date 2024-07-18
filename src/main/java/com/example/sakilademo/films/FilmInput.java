@@ -11,7 +11,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jdk.jfr.Unsigned;
 import lombok.AccessLevel;
-import lombok.Setter;
+import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -19,6 +19,7 @@ import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
 
+@Data
 public class FilmInput {
 
     @Size(min = 1, max = 128)
@@ -29,17 +30,15 @@ public class FilmInput {
         private Year releaseYear;
 
     @NotNull(groups = ValidationGroup.Create.class)
-    @Unsigned
     @Max(255)
-    @Min(0)
-    private int languageId;
+    @Min(1)
+    private short languageId;
 
     private Language language;
 
-    @Unsigned
-    @Min(0)
-    @Max(255)
-    private Short originalLanguageid;
+    private Short originalLanguageId;
+
+    private Language originalLanguage;
 
     @Min(0)
     @Max(255)
@@ -62,7 +61,6 @@ public class FilmInput {
 
     @Convert(converter = SpecialFeaturesConverter.class)
     private List<SpecialFeature> specialFeatures;
-
 
 
 }
