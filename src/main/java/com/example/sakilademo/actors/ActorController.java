@@ -1,5 +1,6 @@
 package com.example.sakilademo.actors;
 
+import java.util.Optional.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,13 +29,13 @@ public class ActorController {
     }
 
     @GetMapping("/actor/{id}")
-    public Actor getActorById(@PathVariable short id){
-        return (actorRepository.findById(id));
+    public ActorResponse getActorById(@PathVariable short id){
+        return (new ActorResponse(actorRepository.findById(id)));
     }
 
     @GetMapping("/actor/")
-    public List<Actor> getActors() {
-        return actorRepository.findAll();
+    public List<ActorResponse> getActors() {
+        return actorRepository.findAll().stream().map(ActorResponse::new).toList();
     }
 
     @DeleteMapping("/actor/{id}")

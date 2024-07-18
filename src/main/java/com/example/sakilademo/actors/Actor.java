@@ -12,6 +12,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
+
 @Entity
 @Getter @Setter
 @Table(name = "actor")
@@ -47,6 +48,11 @@ public class Actor {
 
     Actor() {
         this.lastUpdate = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+    }
+
+    Actor(ActorInput input) {
+        this.firstName = input.getFirstName();
+        this.lastName = input.getLastName();
     }
 
     @PreUpdate

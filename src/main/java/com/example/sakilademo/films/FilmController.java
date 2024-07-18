@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ReflectionUtils;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.beans.PropertyDescriptor;
@@ -26,13 +27,13 @@ public class FilmController {
     private FilmRepository filmRepository;
 
     @GetMapping("/film/{id}")
-    public Film getFilmById(@PathVariable short id){
-        return (filmRepository.findById(id));
+    public FilmResponse getFilmById(@PathVariable short id){
+        return new FilmResponse(filmRepository.findById(id));
     }
 
     @GetMapping("/film/")
-    public List<Film> getFilms() {
-        return filmRepository.findAll();
+    public List<FilmResponse> getFilms() {
+        return filmRepository.findAll().stream().map(FilmResponse::new).toList();
     }
 
     @DeleteMapping("/film/{id}")
@@ -71,7 +72,6 @@ public class FilmController {
     public  ResponseEntity<Film> patchFilm(@PathVariable short id, @RequestBody Map<String, Object> newData) {
 
         Film film = filmRepository.findById(id);
-
         if (film != null ) {
 
             //what is a bean

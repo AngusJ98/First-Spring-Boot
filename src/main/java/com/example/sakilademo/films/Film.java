@@ -86,7 +86,6 @@ public class Film {
     @Column(name = "special_features")
     private List<SpecialFeature> specialFeatures;
 
-    @NotNull
     @Column(name = "last_update")
     private LocalDateTime lastUpdate;
 
