@@ -31,8 +31,6 @@ public class Film {
         this.lastUpdate = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
     }
 
-
-
     @Id
     @Unsigned
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -64,6 +62,7 @@ public class Film {
     private Short originalLanguageid;
 
     @NotNull
+    @Unsigned
     @Column(name = "rental_duration")
     private short rentalDuration;
 
@@ -71,6 +70,7 @@ public class Film {
     @Column(name = "rental_rate")
     private BigDecimal rentalRate;
 
+    @Unsigned
     @Column(name = "length")
     private Short length;
 
