@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/actors")
+@RequestMapping("/films")
 public class FilmController {
 
     @Autowired
@@ -46,10 +46,6 @@ public class FilmController {
     public ResponseEntity<FilmResponse> patchFilm(@RequestBody @Validated FilmInput filmData, @PathVariable short id) {
         return filmService.patchFilm(id, filmData);
     }
-
-
-
-
 
 
 

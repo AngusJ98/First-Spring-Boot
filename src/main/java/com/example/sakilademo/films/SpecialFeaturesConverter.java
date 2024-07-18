@@ -17,7 +17,9 @@ public class SpecialFeaturesConverter implements AttributeConverter<List<Special
 
     @Override
     public String convertToDatabaseColumn(List<SpecialFeature> specialFeatures) throws IllegalArgumentException{
-
+        if (specialFeatures == null) {
+            return null;
+        }
         specialFeatures.forEach( a -> {
             if (Objects.isNull(a)) {
                 throw new IllegalArgumentException("Special features cannot be null");

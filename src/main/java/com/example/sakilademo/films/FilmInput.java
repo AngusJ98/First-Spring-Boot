@@ -34,6 +34,8 @@ public class FilmInput {
     @Min(0)
     private int languageId;
 
+    private Language language;
+
     @Unsigned
     @Min(0)
     @Max(255)
@@ -54,9 +56,13 @@ public class FilmInput {
 
     @NotNull(groups = ValidationGroup.Create.class)
     private BigDecimal replacementCost;
-    
+
+    @Convert(converter = RatingConverter.class)
     private Rating rating;
-    
+
+    @Convert(converter = SpecialFeaturesConverter.class)
     private List<SpecialFeature> specialFeatures;
+
+
 
 }
