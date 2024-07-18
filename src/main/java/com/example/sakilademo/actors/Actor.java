@@ -1,5 +1,6 @@
 package com.example.sakilademo.actors;
 
+import com.example.sakilademo.films.Film;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jdk.jfr.Unsigned;
@@ -8,6 +9,8 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter @Setter
@@ -32,6 +35,14 @@ public class Actor {
     @NotNull
     @Column(name = "last_update")
     private LocalDateTime lastUpdate;
+
+    @ManyToMany
+    @JoinTable(
+            name = "film_actor",
+            joinColumns = {@JoinColumn(name = "actor_id")},
+            inverseJoinColumns = {@JoinColumn(name = "film_id")}
+    )
+    private List<Film> films = new ArrayList<>();
 
 
     Actor() {

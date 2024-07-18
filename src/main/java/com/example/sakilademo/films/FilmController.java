@@ -93,8 +93,9 @@ public class FilmController {
                     throw new IllegalArgumentException("Either the key or value were invalid");
                 }
             });
-
-            return ResponseEntity.ok(filmRepository.save(film));
+            filmRepository.save(film);
+            film = filmRepository.findById(id);
+            return ResponseEntity.ok(film);
         } else {
             return ResponseEntity.notFound().build();
         }

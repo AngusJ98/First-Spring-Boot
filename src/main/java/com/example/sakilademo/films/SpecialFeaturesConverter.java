@@ -3,6 +3,7 @@ package com.example.sakilademo.films;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 import org.apache.tomcat.util.buf.StringUtils;
+import org.hibernate.type.descriptor.java.ObjectJavaType;
 
 import java.util.HashSet;
 import java.util.List;
@@ -16,8 +17,17 @@ public class SpecialFeaturesConverter implements AttributeConverter<List<Special
 
     @Override
     public String convertToDatabaseColumn(List<SpecialFeature> specialFeatures) throws IllegalArgumentException{
-        List<String> strings =  specialFeatures.stream().map(this::stringFromEnum).filter(a -> !a.isEmpty()).toList();
-        if (strings.isEmpty()) return "";
+
+        specialFeatures.forEach( a -> {
+            if (Objects.isNull(a)) {
+                throw new IllegalArgumentException("Special features cannot be null");
+            }
+        });
+        List<String> strings =  specialFeatures.stream().map(this::stringFromEnum).toList();
+        //System.out.println(strings);
+        if (strings.isEmpty()) {
+            return "";
+        }
 
         HashSet<String> hashedStrings = new HashSet<>(strings);
         if (hashedStrings.size() != strings.size()) {
@@ -29,8 +39,7 @@ public class SpecialFeaturesConverter implements AttributeConverter<List<Special
     @Override
     public List<SpecialFeature> convertToEntityAttribute(String s) {
         List<String> strings = List.of(s.split(","));
-        List<String> filteredStrings = strings.stream().filter(a -> !a.isEmpty()).toList();
-        return filteredStrings.stream().map(this::featureFromString).filter(Objects::nonNull).toList();
+        return strings.stream().filter(a -> !a.isEmpty()).map(this::featureFromString).toList();
     }
 
     private SpecialFeature featureFromString(String s) throws IllegalArgumentException{
@@ -50,7 +59,7 @@ public class SpecialFeaturesConverter implements AttributeConverter<List<Special
             case COMMENTARIES -> "Commentaries";
             case DELETED_SCENES -> "Deleted Scenes";
             case BEHIND_THE_SCENES -> "Behind the Scenes";
-            case null -> "";
+            //case null -> "";
         };
     }
 

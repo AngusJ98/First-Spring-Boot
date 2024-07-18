@@ -1,6 +1,8 @@
 package com.example.sakilademo.films;
 
 
+import com.example.sakilademo.actors.Actor;
+import com.example.sakilademo.language.Language;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -52,8 +54,9 @@ public class Film {
 
     @NotNull
     @Unsigned
-    @Column(name = "language_id")
-    private short languageid;
+    @ManyToOne
+    @JoinColumn (name = "language_id")
+    private Language language;
 
     @Unsigned
     @Nullable
@@ -87,6 +90,9 @@ public class Film {
     @Column(name = "last_update")
     private LocalDateTime lastUpdate;
 
+    @ManyToMany(mappedBy = "films")
+    private List<Actor> cast = new ArrayList<>();
+
     @PreUpdate
     protected void onUpdate() {
         this.lastUpdate = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
@@ -99,7 +105,7 @@ public class Film {
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", releaseYear=" + releaseYear +
-                ", languageid=" + languageid +
+                ", languageid=" + language +
                 ", originalLanguageid=" + originalLanguageid +
                 ", rentalDuration=" + rentalDuration +
                 ", rentalRate=" + rentalRate +
