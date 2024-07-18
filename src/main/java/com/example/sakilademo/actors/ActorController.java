@@ -38,17 +38,17 @@ public class ActorController {
     }
 
     @PutMapping("/actor/{id}")
-    public  ResponseEntity<Actor> updateActor(@PathVariable short id, @Validated(ValidationGroup.Create.class) @RequestBody ActorInput input) {
+    public  ResponseEntity<ActorResponse> updateActor(@PathVariable short id, @Validated(ValidationGroup.Create.class) @RequestBody ActorInput input) {
         return actorService.updateActor(input, id);
     }
 
     @PostMapping("/actor/")
-    public ResponseEntity<Actor> newActor(@RequestBody @Validated(ValidationGroup.Create.class) ActorInput input) {
+    public ResponseEntity<ActorResponse> newActor(@RequestBody @Validated(ValidationGroup.Create.class) ActorInput input) {
         return actorService.createActor(input);
     }
 
     @PatchMapping("/actor/{id}")
-    public  ResponseEntity<Actor> patchActor(@PathVariable short id, @RequestBody @Validated(ValidationGroup.Update.class) ActorInput newData) {
+    public  ResponseEntity<ActorResponse> patchActor(@PathVariable short id, @RequestBody @Validated(ValidationGroup.Update.class) ActorInput newData) {
         return actorService.updateActor(newData, id);
     }
 

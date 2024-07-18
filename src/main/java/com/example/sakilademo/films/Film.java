@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.Target;
+import org.springframework.beans.BeanUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -94,6 +95,11 @@ public class Film {
     @PreUpdate
     protected void onUpdate() {
         this.lastUpdate = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+    }
+
+
+    public Film (FilmInput data) {
+        BeanUtils.copyProperties(data, this);
     }
 
     @Override

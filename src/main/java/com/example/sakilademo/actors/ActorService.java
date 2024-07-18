@@ -19,9 +19,9 @@ public class ActorService {
     private ActorRepository actorRepository;
 
 
-    public ResponseEntity<Actor> createActor(ActorInput input) {
+    public ResponseEntity<ActorResponse> createActor(ActorInput input) {
         Actor a = new Actor(input);
-        return ResponseEntity.ok(a);
+        return ResponseEntity.ok(new ActorResponse(a));
     }
 
     public ResponseEntity<List<ActorResponse>> getAllActors() {
@@ -38,11 +38,11 @@ public class ActorService {
 
     }
 
-    public ResponseEntity<Actor> updateActor(ActorInput input, short id) {
+    public ResponseEntity<ActorResponse> updateActor(ActorInput input, short id) {
         Actor actor = actorRepository.findById(id);
         if (actor != null ) {
             BeanUtils.copyProperties(input, actor);
-            return ResponseEntity.ok(actorRepository.save(actor));
+            return ResponseEntity.ok(new ActorResponse(actorRepository.save(actor)));
         } else {
             return ResponseEntity.notFound().build();
         }
