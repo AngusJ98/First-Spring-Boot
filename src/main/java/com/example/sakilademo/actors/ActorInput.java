@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 
 @Data
+@AllArgsConstructor
 public class ActorInput {
     @NotNull(groups = ValidationGroup.Create.class)
     @Size(min = 1, max = 45)
