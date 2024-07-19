@@ -1,10 +1,12 @@
 package com.example.sakilademo.films;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import java.time.Year;
 
 @Getter
+@EqualsAndHashCode
 public class PartialFilmResponse {
     private final Short id;
     private final String title;
