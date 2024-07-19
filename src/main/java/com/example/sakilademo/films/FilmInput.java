@@ -34,8 +34,6 @@ public class FilmInput {
     @Min(1)
     private short languageId;
 
-    private Language language;
-
     private Short originalLanguageId;
 
     private Language originalLanguage;

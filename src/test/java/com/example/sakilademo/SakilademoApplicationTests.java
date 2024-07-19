@@ -54,7 +54,8 @@ class SakilademoApplicationTests {
 		Assertions.assertEquals(expectedLastName, actual.getLastName());
 	}
 
-	@Test public void setActorControllerFindActorThrows404WhenInvalid(){
+	@Test
+	public void setActorControllerFindActorThrows404WhenInvalid(){
 		Exception exception = null;
 		try {
 			actorController.getActorById((short)100002);

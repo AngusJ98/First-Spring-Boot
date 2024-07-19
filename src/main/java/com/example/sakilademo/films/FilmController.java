@@ -43,7 +43,7 @@ public class FilmController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<FilmResponse> patchFilm(@RequestBody @Validated FilmInput filmData, @PathVariable short id) {
+    public ResponseEntity<FilmResponse> patchFilm(@RequestBody FilmInput filmData, @PathVariable short id) {
         return filmService.patchFilm(id, filmData);
     }
 

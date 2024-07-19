@@ -1,5 +1,6 @@
 package com.example.sakilademo.actors;
 
+import lombok.AllArgsConstructor;
 import org.hibernate.query.Page;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import java.util.List;
 
 @Service
 @Transactional
+@AllArgsConstructor
 public class ActorService {
 
     @Autowired

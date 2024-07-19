@@ -4,6 +4,7 @@ package com.example.sakilademo.films;
 import com.example.sakilademo.actors.ActorRepository;
 import com.example.sakilademo.language.Language;
 import com.example.sakilademo.language.LanguageRepository;
+import com.example.sakilademo.utility.Utils;
 import com.example.sakilademo.validation.ValidationGroup;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
@@ -19,6 +20,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.beans.PropertyDescriptor;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -64,7 +66,7 @@ public class FilmService {
         }
     }
 
-    public ResponseEntity<FilmResponse> updateFilm(@PathVariable short id, @Validated(ValidationGroup.Create.class) @RequestBody FilmInput filmData) {
+    public ResponseEntity<FilmResponse> updateFilm(short id, FilmInput filmData) {
 
         Film film = filmRepository.findById(id);
         if (film != null) {
@@ -80,7 +82,7 @@ public class FilmService {
     }
 
 
-    public ResponseEntity<FilmResponse> createFilm(@RequestBody @Validated(ValidationGroup.Create.class) FilmInput filmData) {
+    public ResponseEntity<FilmResponse> createFilm(FilmInput filmData) {
         Film film = new Film(filmData);
         Language language = languageRepository.findById(filmData.getLanguageId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Language not found, or invalid language code entered"));
         film.setLanguage(language);
@@ -89,42 +91,32 @@ public class FilmService {
             film.setOriginalLanguage(originalLanguage);
         }
 
-
-        for (Short castId : filmData.getCastIds()) {
-            film.getCast().add(actorRepository.findById(castId).orElseThrow(() ->new ResponseStatusException(HttpStatus.BAD_REQUEST)));
+        if (filmData.getCastIds() != null) {
+            for (Short castId : filmData.getCastIds()) {
+                film.getCast().add(actorRepository.findById(castId).orElseThrow(() ->new ResponseStatusException(HttpStatus.BAD_REQUEST)));
+            }
         }
 
         return ResponseEntity.ok(new FilmResponse(filmRepository.save(film)));
     }
 
-    public  ResponseEntity<FilmResponse> patchFilm(@PathVariable short id, @RequestBody @Validated FilmInput filmData) {
+    public  ResponseEntity<FilmResponse> patchFilm(short id, FilmInput filmData) {
 
         Film film = filmRepository.findById(id);
-        if (film != null ) {
-            BeanUtils.copyProperties(filmData, film);
-            return ResponseEntity.ok(new FilmResponse(filmRepository.save(film)));
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Film at id " + id + " not found.");
-        }
-            //what is a bean
-            //what is a bean wrapper
-//            //All I know is that this works
-//            BeanWrapper wrap = new BeanWrapperImpl(film);
-//
-//            newData.forEach((a, b) -> {
-//                try {
-//                    PropertyDescriptor pd = wrap.getPropertyDescriptor(a);
-//                    //Method writeMethod = pd.getWriteMethod();
-//                    //do the writing
-//                    if (pd.getWriteMethod() != null) {
-//                        wrap.setPropertyValue(a, b);
-//                        //ReflectionUtils.makeAccessible(writeMethod);
-//                        //writeMethod.invoke(film, b);
-//                    }
-//                } catch (Exception e) {
-//                    throw new IllegalArgumentException("Either the key or value were invalid");
-//                }
-//            });
+
+        List<String> ignored = new ArrayList<>();
+        ignored.add("castIds");
+        ignored.add("languageId");
+        ignored.add("rating");
+        //Use the cool function I wrote to copy all the non-annoying non-null properties to the film
+        Utils.copyNonNullProperties(filmData, film, ignored);
+
+        //TODO Write logic to copy cast and language and rating
+
+
+
+        return ResponseEntity.ok(new FilmResponse(filmRepository.save(film)));
+
     }
 
 
