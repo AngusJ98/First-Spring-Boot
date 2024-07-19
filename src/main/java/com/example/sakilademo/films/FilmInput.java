@@ -62,5 +62,5 @@ public class FilmInput {
     @Convert(converter = SpecialFeaturesConverter.class)
     private List<SpecialFeature> specialFeatures;
 
-
+    private List<Short> castIds;
 }

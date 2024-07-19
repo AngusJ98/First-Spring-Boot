@@ -4,10 +4,13 @@ import org.hibernate.query.Page;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.client.HttpStatusCodeException;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -19,32 +22,32 @@ public class ActorService {
     private ActorRepository actorRepository;
 
 
-    public ResponseEntity<ActorResponse> createActor(ActorInput input) {
+    public ActorResponse createActor(ActorInput input) {
         Actor a = new Actor(input);
-        return ResponseEntity.ok(new ActorResponse(a));
+        return new ActorResponse(a);
     }
 
-    public ResponseEntity<List<ActorResponse>> getAllActors() {
-        return ResponseEntity.ok(actorRepository.findAll().stream().map(ActorResponse::new).toList());
+    public List<ActorResponse> getAllActors() {
+        return actorRepository.findAll().stream().map(ActorResponse::new).toList();
     }
 
-    public ResponseEntity<ActorResponse> getOneActor(short id) {
+    public ActorResponse getOneActor(short id) {
         Actor actor = actorRepository.findById(id);
         if (actor != null) {
-            return ResponseEntity.ok(new ActorResponse(actorRepository.findById(id)));
+            return new ActorResponse(actorRepository.findById(id));
         } else {
-            return ResponseEntity.notFound().build();
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
 
     }
 
-    public ResponseEntity<ActorResponse> updateActor(ActorInput input, short id) {
+    public ActorResponse updateActor(ActorInput input, short id) {
         Actor actor = actorRepository.findById(id);
         if (actor != null ) {
             BeanUtils.copyProperties(input, actor);
-            return ResponseEntity.ok(new ActorResponse(actorRepository.save(actor)));
+            return new ActorResponse(actorRepository.save(actor));
         } else {
-            return ResponseEntity.notFound().build();
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
     }
 
@@ -53,7 +56,7 @@ public class ActorService {
             actorRepository.deleteById(id);
             return ResponseEntity.noContent().build();
         } else {
-            return ResponseEntity.notFound().build();
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
 
     }
