@@ -16,6 +16,7 @@ public class WebConfig
                 System.out.println("Added cors mapping");
                 registry.addMapping("/**").allowedOrigins("http://localhost:5173");
                 registry.addMapping("/**").allowedOrigins("http://18.168.220.61");
+                registry.addMapping("/**").allowedOrigins("http://90.243.145.51");
             }
         };
     }
