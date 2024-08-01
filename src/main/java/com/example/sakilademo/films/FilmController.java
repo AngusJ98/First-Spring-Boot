@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
@@ -28,7 +29,7 @@ public class FilmController {
     }
 
     @PostMapping
-    public ResponseEntity<FilmResponse> createFilm(@RequestBody @Validated(ValidationGroup.Create.class) FilmInput input) {
+    public ResponseEntity<URI> createFilm(@RequestBody @Validated(ValidationGroup.Create.class) FilmInput input) {
         return filmService.createFilm(input);
     }
 

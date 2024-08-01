@@ -18,9 +18,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.beans.PropertyDescriptor;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -83,7 +85,7 @@ public class FilmService {
     }
 
 
-    public ResponseEntity<FilmResponse> createFilm(FilmInput filmData) {
+    public ResponseEntity<URI> createFilm(FilmInput filmData) {
         Film film = new Film(filmData);
 
         Language language = languageRepository.findById(filmData.getLanguageId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Language not found, or invalid language code entered"));
@@ -99,8 +101,11 @@ public class FilmService {
             }
         }
         FilmResponse response =  new FilmResponse(filmRepository.save(film));
-        System.out.println("FILM INFO: " + film);
-        return ResponseEntity.ok(response);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(response.getId())
+                .toUri();
+        return ResponseEntity.created(location).build();
     }
 
     public  ResponseEntity<FilmResponse> patchFilm(short id, FilmInput filmData) {
