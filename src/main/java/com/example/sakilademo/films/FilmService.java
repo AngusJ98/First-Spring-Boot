@@ -1,6 +1,7 @@
 package com.example.sakilademo.films;
 
 
+import com.example.sakilademo.actors.Actor;
 import com.example.sakilademo.actors.ActorRepository;
 import com.example.sakilademo.language.Language;
 import com.example.sakilademo.language.LanguageRepository;
@@ -84,6 +85,7 @@ public class FilmService {
 
     public ResponseEntity<FilmResponse> createFilm(FilmInput filmData) {
         Film film = new Film(filmData);
+
         Language language = languageRepository.findById(filmData.getLanguageId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Language not found, or invalid language code entered"));
         film.setLanguage(language);
         if (filmData.getOriginalLanguageId() != null) {
@@ -93,11 +95,12 @@ public class FilmService {
 
         if (filmData.getCastIds() != null) {
             for (Short castId : filmData.getCastIds()) {
-                film.getCast().add(actorRepository.findById(castId).orElseThrow(() ->new ResponseStatusException(HttpStatus.BAD_REQUEST)));
+                film.getCast().add(actorRepository.findById(castId).orElseThrow(() ->new ResponseStatusException(HttpStatus.BAD_REQUEST, "Actor not found at ID: " + castId)));
             }
         }
-
-        return ResponseEntity.ok(new FilmResponse(filmRepository.save(film)));
+        FilmResponse response =  new FilmResponse(filmRepository.save(film));
+        System.out.println("FILM INFO: " + film);
+        return ResponseEntity.ok(response);
     }
 
     public  ResponseEntity<FilmResponse> patchFilm(short id, FilmInput filmData) {
@@ -113,9 +116,9 @@ public class FilmService {
 
         //TODO Write logic to copy cast and language and rating
 
-
-
-        return ResponseEntity.ok(new FilmResponse(filmRepository.save(film)));
+        FilmResponse response =  new FilmResponse(filmRepository.save(film));
+        System.out.println("FILM INFO: " + film);
+        return ResponseEntity.ok(response);
 
     }
 

@@ -11,7 +11,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@CrossOrigin(origins = "http://localhost:5173")
 @AllArgsConstructor
 @RequestMapping("/actors")
 @RestController
@@ -42,7 +42,7 @@ public class ActorController {
     }
 
     @PostMapping
-    public ActorResponse newActor(@RequestBody @Validated(ValidationGroup.Create.class) ActorInput input) {
+    public ResponseEntity<HttpStatus> newActor(@RequestBody @Validated(ValidationGroup.Create.class) ActorInput input) {
         return actorService.createActor(input);
     }
 

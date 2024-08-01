@@ -84,7 +84,12 @@ public class Film {
     @Column(name = "last_update")
     private LocalDateTime lastUpdate;
 
-    @ManyToMany(mappedBy = "films")
+    @ManyToMany
+    @JoinTable(
+            name = "film_actor",
+            joinColumns = {@JoinColumn(name = "film_id")},
+            inverseJoinColumns = {@JoinColumn(name = "actor_id")}
+    )
     private List<Actor> cast = new ArrayList<>();
 
     @PreUpdate
@@ -106,8 +111,8 @@ public class Film {
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", releaseYear=" + releaseYear +
-                ", languageid=" + language +
-                ", originalLanguageid=" + originalLanguage +
+                ", language=" + language +
+                ", originalLanguage=" + originalLanguage +
                 ", rentalDuration=" + rentalDuration +
                 ", rentalRate=" + rentalRate +
                 ", length=" + length +
@@ -115,6 +120,7 @@ public class Film {
                 ", rating=" + rating +
                 ", specialFeatures=" + specialFeatures +
                 ", lastUpdate=" + lastUpdate +
+                ", cast=" + cast +
                 '}';
     }
 }

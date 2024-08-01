@@ -12,7 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @Service
@@ -24,9 +26,14 @@ public class ActorService {
     private ActorRepository actorRepository;
 
 
-    public ActorResponse createActor(ActorInput input) {
+    public ResponseEntity<HttpStatus> createActor(ActorInput input) {
         Actor a = new Actor(input);
-        return new ActorResponse(a);
+        ActorResponse res = new ActorResponse(actorRepository.save(a));
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(res.getId())
+                .toUri();
+        return ResponseEntity.created(location).build();
     }
 
     public List<ActorResponse> getAllActors() {
