@@ -2,6 +2,7 @@ package com.example.sakilademo.films;
 
 import com.example.sakilademo.actors.PartialActorResponse;
 import com.example.sakilademo.language.Language;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.math.BigDecimal;
@@ -11,6 +12,7 @@ import java.util.List;
 
 
 @Getter
+@AllArgsConstructor
 public class FilmResponse {
 
     private final Short id;

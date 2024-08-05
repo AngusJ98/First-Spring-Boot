@@ -2,6 +2,7 @@ package com.example.sakilademo.films;
 
 
 import com.example.sakilademo.validation.ValidationGroup;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,24 +14,26 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/films")
+@AllArgsConstructor
 public class FilmController {
+
 
     @Autowired
     private FilmService filmService;
 
     @GetMapping("/{id}")
     public ResponseEntity<FilmResponse> getFilmById(@PathVariable short id) {
-        return filmService.getFilmById(id);
+        return new ResponseEntity<>(filmService.getFilmById(id), HttpStatus.OK);
     }
 
     @GetMapping
     public ResponseEntity<List<FilmResponse>> getAllFilms() {
-        return filmService.getAllFilms();
+        return new ResponseEntity<>(filmService.getAllFilms(), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<URI> createFilm(@RequestBody @Validated(ValidationGroup.Create.class) FilmInput input) {
-        return filmService.createFilm(input);
+    public ResponseEntity<FilmResponse> createFilm(@RequestBody @Validated(ValidationGroup.Create.class) FilmInput input) {
+        return new ResponseEntity<>(filmService.createFilm(input), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
@@ -40,12 +43,12 @@ public class FilmController {
 
     @PutMapping("/{id}")
     public ResponseEntity<FilmResponse> updateFilm(@RequestBody @Validated(ValidationGroup.Create.class) FilmInput filmData, @PathVariable short id) {
-        return filmService.updateFilm(id, filmData);
+        return new ResponseEntity<>(filmService.updateFilm(id, filmData), HttpStatus.OK);
     }
 
     @PatchMapping("/{id}")
     public ResponseEntity<FilmResponse> patchFilm(@RequestBody FilmInput filmData, @PathVariable short id) {
-        return filmService.patchFilm(id, filmData);
+        return new ResponseEntity<>(filmService.patchFilm(id, filmData), HttpStatus.OK);
     }
 
 

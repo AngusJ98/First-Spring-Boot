@@ -1,5 +1,6 @@
 package com.example.sakilademo.actors;
 
+import com.example.sakilademo.utility.Utils;
 import lombok.AllArgsConstructor;
 import org.hibernate.query.Page;
 import org.springframework.beans.BeanUtils;
@@ -26,14 +27,10 @@ public class ActorService {
     private ActorRepository actorRepository;
 
 
-    public ResponseEntity<HttpStatus> createActor(ActorInput input) {
+    public ActorResponse createActor(ActorInput input) {
         Actor a = new Actor(input);
         ActorResponse res = new ActorResponse(actorRepository.save(a));
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(res.getId())
-                .toUri();
-        return ResponseEntity.created(location).build();
+        return res;
     }
 
     public List<ActorResponse> getAllActors() {
@@ -53,17 +50,16 @@ public class ActorService {
     public ActorResponse updateActor(ActorInput input, short id) {
         Actor actor = actorRepository.findById(id);
         if (actor != null ) {
-            BeanUtils.copyProperties(input, actor);
+            Utils.copyNonNullProperties(input, actor);
             return new ActorResponse(actorRepository.save(actor));
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
     }
 
-    public ResponseEntity<HttpStatus> deleteActor(short id) {
+    public void deleteActor(short id) {
         if (actorRepository.findById(id) != null) {
             actorRepository.deleteById(id);
-            return ResponseEntity.noContent().build();
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }

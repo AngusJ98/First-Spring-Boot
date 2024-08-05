@@ -40,18 +40,18 @@ public class FilmService {
     @Autowired
     private ActorRepository actorRepository;
 
-    public ResponseEntity<FilmResponse> getFilmById(short id){
+    public FilmResponse getFilmById(short id){
         Film film = filmRepository.findById(id);
         if (film != null) {
-            return ResponseEntity.ok(new FilmResponse(film));
+            return new FilmResponse(film);
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
 
     }
 
-    public ResponseEntity<List<FilmResponse>> getAllFilms() {
-        return ResponseEntity.ok(filmRepository.findAll().stream().map(FilmResponse::new).toList());
+    public List<FilmResponse> getAllFilms() {
+        return filmRepository.findAll().stream().map(FilmResponse::new).toList();
     }
 
     public ResponseEntity<HttpStatus> deleteFilm(short id) {
@@ -69,23 +69,19 @@ public class FilmService {
         }
     }
 
-    public ResponseEntity<FilmResponse> updateFilm(short id, FilmInput filmData) {
+    public FilmResponse updateFilm(short id, FilmInput filmData) {
 
         Film film = filmRepository.findById(id);
         if (film != null) {
-            try {
-                BeanUtils.copyProperties(filmData, film);
-                return ResponseEntity.ok(new FilmResponse(filmRepository.save(film)));
-            } catch (IllegalArgumentException e) {
-                return ResponseEntity.badRequest().build();
-            }
+            BeanUtils.copyProperties(filmData, film);
+            return new FilmResponse(filmRepository.save(film));
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
     }
 
 
-    public ResponseEntity<URI> createFilm(FilmInput filmData) {
+    public FilmResponse createFilm(FilmInput filmData) {
         Film film = new Film(filmData);
 
         Language language = languageRepository.findById(filmData.getLanguageId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Language not found, or invalid language code entered"));
@@ -101,14 +97,11 @@ public class FilmService {
             }
         }
         FilmResponse response =  new FilmResponse(filmRepository.save(film));
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(response.getId())
-                .toUri();
-        return ResponseEntity.created(location).build();
+
+        return response;
     }
 
-    public  ResponseEntity<FilmResponse> patchFilm(short id, FilmInput filmData) {
+    public  FilmResponse patchFilm(short id, FilmInput filmData) {
 
         Film film = filmRepository.findById(id);
 
@@ -122,8 +115,7 @@ public class FilmService {
         //TODO Write logic to copy cast and language and rating
 
         FilmResponse response =  new FilmResponse(filmRepository.save(film));
-        System.out.println("FILM INFO: " + film);
-        return ResponseEntity.ok(response);
+        return response;
 
     }
 
