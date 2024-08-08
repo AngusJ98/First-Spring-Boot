@@ -60,7 +60,7 @@ class SakilademoApplicationTests {
 
 		Assertions.assertNotNull(exception);
 		Assertions.assertInstanceOf(ResponseStatusException.class, exception);
-		Assertions.assertEquals(String.valueOf(HttpStatus.NOT_FOUND), String.valueOf(exception.getMessage()));
+		Assertions.assertEquals(String.valueOf(HttpStatus.NOT_FOUND.value()), (exception.getMessage()));
 	}
 
 
