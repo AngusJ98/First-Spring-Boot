@@ -47,8 +47,8 @@ public class FilmControllerStepdefs {
     }
 
     @When("a GET request is made to \\/films\\/{int}")
-    public void aGETRequestIsMadeToFilms(int filmId) {
-        responseEntity = filmController.getFilmById((short) filmId);
+    public void aGETRequestIsMadeToFilms(short filmId) {
+        responseEntity = filmController.getFilmById(filmId);
     }
 
     @Then("an FilmResponse is returned")
@@ -76,9 +76,9 @@ public class FilmControllerStepdefs {
     }
 
 
-    @Given("an film does not exist with ID {int}")
-    public void anFilmDoesNotExistWithID(int filmId) {
-        when(mockService.getFilmById((short) filmId)).thenThrow(new ResponseStatusException(HttpStatus.NOT_FOUND));
+    @Given("an film does not exist with ID {short}")
+    public void anFilmDoesNotExistWithID(short filmId) {
+        when(mockService.getFilmById(filmId)).thenThrow(new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
     @Then("an empty film response is returned")

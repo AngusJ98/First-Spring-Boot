@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.net.URI;
 import java.util.List;
@@ -23,7 +24,11 @@ public class FilmController {
 
     @GetMapping("/{id}")
     public ResponseEntity<FilmResponse> getFilmById(@PathVariable short id) {
-        return new ResponseEntity<>(filmService.getFilmById(id), HttpStatus.OK);
+        try {
+            return new ResponseEntity<>(filmService.getFilmById(id), HttpStatus.OK);
+        } catch (ResponseStatusException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping
