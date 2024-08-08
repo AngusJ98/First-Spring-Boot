@@ -3,11 +3,13 @@ package com.example.sakilademo.utility;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 
-import javax.crypto.spec.PSource;
 import java.beans.PropertyDescriptor;
 import java.util.*;
 
 public class Utils {
+    private Utils() {
+
+    }
     public static void copyNonNullProperties(Object src, Object target) {
         if (src == null || target == null) {
             throw new IllegalArgumentException("Either source or target does not exist");
@@ -23,7 +25,7 @@ public class Utils {
                 srcMap.add(srcDescriptor.getName());
         }
 
-        srcMap.forEach((a) -> {
+        srcMap.forEach(a -> {
             try {
                 Object value = srcWrapper.getPropertyValue(a);
                 if (value != null) {
@@ -57,7 +59,7 @@ public class Utils {
             }
         }
 
-        srcMap.forEach((a) -> {
+        srcMap.forEach(a -> {
             try {
                 Object value = srcWrapper.getPropertyValue(a);
                 if (value != null) {
@@ -68,7 +70,6 @@ public class Utils {
                     }
                 }
             } catch (Exception e) {
-                e.printStackTrace();
                 throw new IllegalArgumentException(e.toString());
 
             }
