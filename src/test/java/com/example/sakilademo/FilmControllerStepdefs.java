@@ -46,7 +46,7 @@ public class FilmControllerStepdefs {
                 .thenReturn(newFilmResponse);
     }
 
-    @When("a GET request is made to \\/films\\/{int}")
+    @When("a GET request is made to \\/films\\/{short}")
     public void aGETRequestIsMadeToFilms(short filmId) {
         responseEntity = filmController.getFilmById(filmId);
     }
