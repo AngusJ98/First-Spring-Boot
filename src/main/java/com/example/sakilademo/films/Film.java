@@ -6,6 +6,7 @@ import com.example.sakilademo.language.Language;
 import jakarta.persistence.*;
 import jdk.jfr.Unsigned;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.BeanUtils;
@@ -19,6 +20,7 @@ import java.util.*;
 @Entity
 @Getter
 @Setter
+@AllArgsConstructor
 @Table(name = "film", schema = "sakila")
 public class Film {
 

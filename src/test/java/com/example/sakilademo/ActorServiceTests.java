@@ -81,7 +81,7 @@ class ActorServiceTests {
     @Test
     void actorServiceTriesToDeleteANonExistentActor() {
         Assertions.assertThrows(ResponseStatusException.class,
-                () -> actorService.getOneActor((short)5100));
+                () -> actorService.deleteActor((short) 5100));
     }
 
     @Test
