@@ -109,7 +109,7 @@
 						<exclude>*.feature</exclude>
 						<exclude>**/test/**</exclude>
 						<exclude>**/validation/ValidationGroup</exclude>
-						<exclude>**/*input*</exclude>
+						<exclude>**/*Input*</exclude>
 						<exclude>**/*Response*</exclude>
 					</excludes>
 				</configuration>
