@@ -1,6 +1,7 @@
 package com.example.sakilademo.actors;
 
 import com.example.sakilademo.utility.Utils;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,10 +37,14 @@ public class ActorService {
     }
 
     public ActorResponse getOneActor(short id) {
-        Actor actor = actorRepository.findById(id);
-        if (actor != null) {
-            return new ActorResponse(actorRepository.findById(id));
-        } else {
+        try {
+            Actor actor = actorRepository.findById(id);
+            if (actor != null) {
+                return new ActorResponse(actorRepository.findById(id));
+            } else {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            }
+        } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
 
