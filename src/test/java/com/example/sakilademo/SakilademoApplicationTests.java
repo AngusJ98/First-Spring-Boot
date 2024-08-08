@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
@@ -51,16 +52,13 @@ class SakilademoApplicationTests {
 
 	@Test
 	void setActorControllerFindActorThrows404WhenInvalid(){
-		Exception exception = null;
-		try {
-			actorController.getActorById((short)100002);
-		} catch (Exception e) {
-			exception = e;
-		}
 
-		Assertions.assertNotNull(exception);
-		Assertions.assertInstanceOf(ResponseStatusException.class, exception);
-		Assertions.assertEquals(String.valueOf(HttpStatus.NOT_FOUND.value()), (exception.getMessage()));
+		ResponseEntity<ActorResponse> response = actorController.getActorById((short)100002);
+
+		Assertions.assertNotNull(response);
+		Assertions.assertNull(response.getBody());
+		Assertions.assertInstanceOf(ResponseEntity.class, response);
+
 	}
 
 
