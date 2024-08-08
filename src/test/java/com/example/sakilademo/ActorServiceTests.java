@@ -33,6 +33,7 @@ class ActorServiceTests {
         actorService = new ActorService(mockRepo);
         when(mockRepo.save(any())).thenAnswer(i -> i.getArguments()[0]);
         when(mockRepo.findAll()).thenReturn(Arrays.asList(example, example2));
+        doThrow(new EntityNotFoundException()).when(mockRepo).deleteById((short) 5100);
     }
 
     @Test
@@ -70,5 +71,35 @@ class ActorServiceTests {
         List<ActorResponse> actors = actorService.getAllActors();
         Assertions.assertNotNull(actors);
         Assertions.assertEquals(2, actors.size());
+    }
+
+    @Test
+    void actorServiceDeletesAnActor() {
+        Assertions.assertDoesNotThrow(() -> actorService.deleteActor((short) 42));
+    }
+
+    @Test
+    void actorServiceTriesToDeleteANonExistentActor() {
+        Assertions.assertThrows(ResponseStatusException.class,
+                () -> actorService.getOneActor((short)5100));
+    }
+
+    @Test
+    void actorServiceUpdates() {
+        String firstName = "Bill";
+        String lastName = "Williams";
+
+        ActorResponse response = actorService.updateActor(new ActorInput(firstName, lastName), (short)1);
+        Assertions.assertEquals(firstName, response.getFirstName());
+        Assertions.assertEquals(lastName, response.getLastName());
+        Assertions.assertEquals(response.getFilms(), new ArrayList<>());
+    }
+
+    @Test
+    void actorServiceTriesToUpdateNonExistentActor(){
+        String firstName = "Bill";
+        String lastName = "Williams";
+        Assertions.assertThrows(ResponseStatusException.class,
+                () -> actorService.updateActor(new ActorInput(firstName, lastName), (short)5100));
     }
 }

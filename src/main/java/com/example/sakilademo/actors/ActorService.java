@@ -38,12 +38,7 @@ public class ActorService {
 
     public ActorResponse getOneActor(short id) {
         try {
-            Actor actor = actorRepository.findById(id);
-            if (actor != null) {
-                return new ActorResponse(actorRepository.findById(id));
-            } else {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-            }
+            return new ActorResponse(actorRepository.findById(id));
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
@@ -51,22 +46,21 @@ public class ActorService {
     }
 
     public ActorResponse updateActor(ActorInput input, short id) {
-        Actor actor = actorRepository.findById(id);
-        if (actor != null ) {
+        try {
+            Actor actor = actorRepository.findById(id);
             Utils.copyNonNullProperties(input, actor);
             return new ActorResponse(actorRepository.save(actor));
-        } else {
+        } catch (EntityNotFoundException e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
     }
 
     public void deleteActor(short id) {
-        if (actorRepository.findById(id) != null) {
+        try {
             actorRepository.deleteById(id);
-        } else {
+        } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
-
     }
 
 
