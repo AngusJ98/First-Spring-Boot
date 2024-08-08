@@ -20,8 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class FilmControllerStepdefs {
     private FilmService mockService;
@@ -48,7 +47,7 @@ public class FilmControllerStepdefs {
 
     @When("a GET request is made to \\/films\\/{short}")
     public void aGETRequestIsMadeToFilms(short filmId) {
-        responseEntity = filmController.getFilmById(filmId);
+        this.responseEntity = filmController.getFilmById(filmId);
     }
 
     @Then("an FilmResponse is returned")
@@ -78,7 +77,7 @@ public class FilmControllerStepdefs {
 
     @Given("an film does not exist with ID {short}")
     public void anFilmDoesNotExistWithID(short filmId) {
-        when(mockService.getFilmById(filmId)).thenThrow(new ResponseStatusException(HttpStatus.NOT_FOUND));
+        doThrow(new ResponseStatusException(HttpStatus.NOT_FOUND)).when(mockService).getFilmById(filmId);
     }
 
     @Then("an empty film response is returned")

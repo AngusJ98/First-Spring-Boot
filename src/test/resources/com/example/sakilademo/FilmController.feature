@@ -12,5 +12,5 @@ Feature: FilmController
   Scenario: An film that doesn't exist is read by ID
     Given an film does not exist with ID 5000
     When a GET request is made to /films/5000
-    Then an empty response is returned
+    Then an empty film response is returned
     And the status code for the film is 404

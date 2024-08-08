@@ -60,7 +60,7 @@ public class ActorControllerStepdefs {
 
     @Given("an actor does not exist with ID {short}")
     public void anActorDoesNotExistWithID(short actorId) {
-        when(mockService.getOneActor((short) actorId)).thenThrow(new ResponseStatusException(HttpStatus.NOT_FOUND));
+        when(mockService.getOneActor(actorId)).thenThrow(new ResponseStatusException(HttpStatus.NOT_FOUND));
         doThrow(new ResponseStatusException(HttpStatus.NOT_FOUND)).when(mockService).deleteActor(actorId);
         doThrow(new ResponseStatusException(HttpStatus.NOT_FOUND)).when(mockService).updateActor(any(ActorInput.class), eq(actorId));
 
