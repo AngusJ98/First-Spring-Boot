@@ -28,6 +28,10 @@
 	</scm>
 	<properties>
 		<java.version>21</java.version>
+		<properties>
+			<sonar.organization>angusj98</sonar.organization>
+			<sonar.host.url>https://sonarcloud.io</sonar.host.url>
+		</properties>
 	</properties>
 	<dependencies>
 		<dependency>
