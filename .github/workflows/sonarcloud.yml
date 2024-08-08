@@ -44,7 +44,7 @@ jobs:
 
     steps:
       - name: Verify with Maven
-        run: mvn verify --file pom.xml
+        run: mvn verify --file ./pom.xml
 
 
       - name: Analyze with SonarCloud
