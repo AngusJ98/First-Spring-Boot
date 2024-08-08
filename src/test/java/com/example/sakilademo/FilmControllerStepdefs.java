@@ -1,6 +1,5 @@
 package com.example.sakilademo;
 
-import com.example.sakilademo.actors.PartialActorResponse;
 import com.example.sakilademo.films.*;
 import com.example.sakilademo.language.Language;
 import io.cucumber.java.Before;
@@ -17,7 +16,6 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.Year;
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -25,9 +23,7 @@ import static org.mockito.Mockito.*;
 public class FilmControllerStepdefs {
     private FilmService mockService;
     private FilmController filmController;
-    private FilmResponse filmResponse;
     private ResponseEntity<FilmResponse> responseEntity;
-    private int statusCode;
     private FilmInput filmInput;
 
     @Before

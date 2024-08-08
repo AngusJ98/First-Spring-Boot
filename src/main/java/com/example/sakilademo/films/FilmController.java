@@ -9,18 +9,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.net.URI;
 import java.util.List;
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/films")
-@AllArgsConstructor
-public class FilmController {
 
+public class FilmController {
+    private final FilmService filmService;
 
     @Autowired
-    private FilmService filmService;
+    public FilmController(FilmService filmService) {
+        this.filmService = filmService;
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<FilmResponse> getFilmById(@PathVariable short id) {

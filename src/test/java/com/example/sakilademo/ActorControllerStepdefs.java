@@ -4,34 +4,26 @@ import com.example.sakilademo.actors.ActorController;
 import com.example.sakilademo.actors.ActorInput;
 import com.example.sakilademo.actors.ActorResponse;
 import com.example.sakilademo.actors.ActorService;
-import com.example.sakilademo.films.PartialFilmResponse;
 import io.cucumber.java.Before;
-import io.cucumber.java.bs.A;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.Assert;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.mockito.Mockito.*;
 
 public class ActorControllerStepdefs {
     private ActorService mockService;
     private ActorController actorController;
-    private ActorResponse actorResponse;
+
     private ResponseEntity<ActorResponse> responseEntity;
-    private int statusCode;
     private ActorInput actorInput;
-    private ResponseEntity<HttpStatus> deleteResponseEntity;
 
     @Before
     public void setup() {
@@ -133,6 +125,6 @@ public class ActorControllerStepdefs {
 
     @Given("an invalid ActorInput")
     public void anInvalidActorInput() {
-
+        // TODO add this test
     }
 }

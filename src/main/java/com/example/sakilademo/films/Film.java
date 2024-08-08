@@ -44,9 +44,6 @@ public class Film {
     @Column(name = "release_year")
     private Year releaseYear;
 
-    //private short languageId;
-
-
 
     @ManyToOne
     @JoinColumn (name = "language_id")

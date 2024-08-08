@@ -1,23 +1,20 @@
 package com.example.sakilademo.films;
 
-import com.example.sakilademo.actors.Actor;
+
 import com.example.sakilademo.language.Language;
 import com.example.sakilademo.validation.ValidationGroup;
-import jakarta.annotation.Nullable;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jdk.jfr.Unsigned;
-import lombok.AccessLevel;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
-
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.time.Year;
-import java.util.ArrayList;
 import java.util.List;
 
 @Data
