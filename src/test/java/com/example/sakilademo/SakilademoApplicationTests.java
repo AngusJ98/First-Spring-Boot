@@ -4,13 +4,11 @@ import com.example.sakilademo.actors.Actor;
 import com.example.sakilademo.actors.ActorController;
 import com.example.sakilademo.actors.ActorResponse;
 import com.example.sakilademo.actors.ActorService;
-import com.example.sakilademo.films.Film;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
-;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
@@ -28,7 +26,7 @@ class SakilademoApplicationTests {
 		//when(mockService.getOneActor((short) 1)).thenReturn(ResponseEntity.ok(new ActorResponse(new Actor((short) 1, "Fergus", "Bentley", new ArrayList<Film>()))));
 
 		doThrow(new ResponseStatusException(HttpStatus.NOT_FOUND)).when(mockService).getOneActor(anyShort());
-		doReturn(new ActorResponse(new Actor((short) 1, "Fergus", "Bentley", new ArrayList<Film>()))).when(mockService).getOneActor((short) 1);
+		doReturn(new ActorResponse(new Actor((short) 1, "Fergus", "Bentley", new ArrayList<>()))).when(mockService).getOneActor((short) 1);
 		actorController = new ActorController(mockService);
 	}
 
@@ -40,7 +38,7 @@ class SakilademoApplicationTests {
 	}
 
 	@Test
-	public void actorControllerGetsExistingActor() {
+	void actorControllerGetsExistingActor() {
 		final short expectedId = 1;
 		final var expectedFirstName = "Fergus";
 		final var expectedLastName = "Bentley";
@@ -52,7 +50,7 @@ class SakilademoApplicationTests {
 	}
 
 	@Test
-	public void setActorControllerFindActorThrows404WhenInvalid(){
+	void setActorControllerFindActorThrows404WhenInvalid(){
 		Exception exception = null;
 		try {
 			actorController.getActorById((short)100002);

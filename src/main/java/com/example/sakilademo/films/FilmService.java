@@ -58,7 +58,7 @@ public class FilmService {
                 filmRepository.deleteById(id);
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             } catch (Exception e) {
-                e.printStackTrace();
+                //e.printStackTrace();
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
         } else {
