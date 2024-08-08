@@ -112,6 +112,9 @@
 						<exclude>**/*Input*</exclude>
 						<exclude>**/*Response*</exclude>
 					</excludes>
+					<formats>
+						<format>XML</format>
+					</formats>
 				</configuration>
 				<executions>
 					<execution>
