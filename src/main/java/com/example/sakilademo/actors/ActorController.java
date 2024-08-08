@@ -45,14 +45,18 @@ public class ActorController {
         try {
             actorService.deleteActor(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (HttpStatusCodeException e) {
+        } catch (ResponseStatusException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
     @PutMapping("/{id}")
     public  ResponseEntity<ActorResponse> updateActor(@PathVariable short id, @Validated(ValidationGroup.Create.class) @RequestBody ActorInput input) {
-        return new ResponseEntity<>(actorService.updateActor(input, id), HttpStatus.OK);
+        try {
+            return new ResponseEntity<>(actorService.updateActor(input, id), HttpStatus.OK);
+        } catch (ResponseStatusException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
 
@@ -63,7 +67,11 @@ public class ActorController {
 
     @PatchMapping("/{id}")
     public  ResponseEntity<ActorResponse> patchActor(@PathVariable short id, @RequestBody @Validated(ValidationGroup.Update.class) ActorInput newData) {
-        return new ResponseEntity<>(actorService.updateActor(newData, id), HttpStatus.OK);
+        try {
+            return new ResponseEntity<>(actorService.updateActor(newData, id), HttpStatus.OK);
+        } catch (ResponseStatusException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
 

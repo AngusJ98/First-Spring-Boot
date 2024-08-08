@@ -41,11 +41,13 @@ public class ActorControllerStepdefs {
 
 
 
-    @Given("an actor exists with ID {int}")
-    public void anActorExistsWithID(int actorId) {
+    @Given("an actor exists with ID {short}")
+    public void anActorExistsWithID(short actorId) {
         ActorResponse newActorResponse = new ActorResponse((short) actorId, "First", "Last", new ArrayList<>());
-        when(mockService.getOneActor((short) actorId))
+        when(mockService.getOneActor(actorId))
                 .thenReturn(newActorResponse);
+        when(mockService.updateActor(any(ActorInput.class),eq(actorId)))
+                .thenReturn(new ActorResponse(actorId, "UpdatedFirst", "UpdatedLast", new ArrayList<>()));
     }
 
     @Given("a valid ActorInput request body")
@@ -60,6 +62,9 @@ public class ActorControllerStepdefs {
     public void anActorDoesNotExistWithID(short actorId) {
         when(mockService.getOneActor((short) actorId)).thenThrow(new ResponseStatusException(HttpStatus.NOT_FOUND));
         doThrow(new ResponseStatusException(HttpStatus.NOT_FOUND)).when(mockService).deleteActor(actorId);
+        doThrow(new ResponseStatusException(HttpStatus.NOT_FOUND)).when(mockService).updateActor(any(ActorInput.class), eq(actorId));
+
+
     }
 
 
@@ -122,9 +127,12 @@ public class ActorControllerStepdefs {
 
     @When("a PUT request is made to the collection with ID {short}")
     public void aPUTRequestIsMadeToTheCollectionWithID(short actorId) {
-        when(mockService.updateActor(any(ActorInput.class),eq(actorId)))
-                .thenReturn(new ActorResponse(actorId, "UpdatedFirst", "UpdatedLast", new ArrayList<>()));
         responseEntity = actorController.patchActor(actorId, new ActorInput("UpdatedFirst", "UpdatedLast"));
         responseEntity = actorController.updateActor(actorId, new ActorInput("UpdatedFirst", "UpdatedLast"));
+    }
+
+    @Given("an invalid ActorInput")
+    public void anInvalidActorInput() {
+
     }
 }

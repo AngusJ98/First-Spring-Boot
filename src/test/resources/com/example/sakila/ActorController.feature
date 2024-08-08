@@ -35,3 +35,14 @@ Feature: ActorController
     When a DELETE request is made to the actors collection with ID 5500
     Then an empty response is returned
     And the status code is 404
+  Scenario: An actor that doesn't exist is put
+    Given an actor does not exist with ID 455
+    When a PUT request is made to the collection with ID 455
+    Then an empty response is returned
+    And the status code is 404
+  Scenario: An actor is put
+    Given an invalid ActorInput
+    And an actor exists with ID 99
+    When a PUT request is made to the collection with ID 99
+    Then an empty response is returned
+    And the status code is 400
