@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jdk.jfr.Unsigned;
 import lombok.AllArgsConstructor;
+import lombok.Generated;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -49,6 +50,7 @@ public class Actor {
     }
 
     @Override
+    @Generated
     public String toString() {
         return "Actor{" +
                 "id=" + id +
