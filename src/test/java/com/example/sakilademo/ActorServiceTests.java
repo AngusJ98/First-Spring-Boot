@@ -7,8 +7,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 
@@ -16,14 +14,14 @@ import static org.mockito.ArgumentMatchers.anyShort;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
-public class ActorServiceTests {
+class ActorServiceTests {
 
     private ActorService actorService;
 
     @BeforeEach
     public void setup() {
         final var mockRepo = mock(ActorRepository.class);
-        //when(mockService.getOneActor((short) 1)).thenReturn(ResponseEntity.ok(new ActorResponse(new Actor((short) 1, "Fergus", "Bentley", new ArrayList<Film>()))));
+
 
         doThrow(new EntityNotFoundException()).when(mockRepo).findById(anyShort());
         doReturn(new Actor((short) 1, "Fergus", "Bentley", new ArrayList<Film>())).when(mockRepo).findById((short) 1);
@@ -31,7 +29,7 @@ public class ActorServiceTests {
     }
 
     @Test
-    public void actorServiceGetsExistingActor() {
+    void actorServiceGetsExistingActor() {
         final short expectedId = 1;
         final var expectedFirstName = "Fergus";
         final var expectedLastName = "Bentley";
@@ -43,7 +41,7 @@ public class ActorServiceTests {
     }
 
     @Test
-    public void actorServiceCantFind() {
+    void actorServiceCantFind() {
         Exception exception = null;
         try {
             actorService.getOneActor((short)100002);
