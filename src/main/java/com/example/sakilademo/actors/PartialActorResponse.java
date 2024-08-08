@@ -1,9 +1,9 @@
 package com.example.sakilademo.actors;
 
-import com.example.sakilademo.films.PartialFilmResponse;
+
 import lombok.Getter;
 
-import java.util.List;
+
 
 @Getter
 public class PartialActorResponse {

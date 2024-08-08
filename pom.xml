@@ -107,7 +107,8 @@
 				<configuration>
 					<excludes>
 						<exclude>*.feature</exclude>
-						<exclude>./test/**</exclude>
+						<exclude>**/test/**</exclude>
+						<exclude>**/validation/ValidationGroup</exclude>
 					</excludes>
 				</configuration>
 				<executions>

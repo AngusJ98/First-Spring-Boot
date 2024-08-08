@@ -2,14 +2,11 @@ package com.example.sakilademo.films;
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
-import org.apache.tomcat.util.buf.StringUtils;
-import org.hibernate.type.descriptor.java.ObjectJavaType;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
 
 @Converter(autoApply = true)
 public class SpecialFeaturesConverter implements AttributeConverter<List<SpecialFeature>, String> {
@@ -50,7 +47,6 @@ public class SpecialFeaturesConverter implements AttributeConverter<List<Special
              case "Commentaries" -> SpecialFeature.COMMENTARIES;
              case "Deleted Scenes" -> SpecialFeature.DELETED_SCENES;
              case "Behind the Scenes" -> SpecialFeature.BEHIND_THE_SCENES;
-             //case "" -> null;
              default -> throw new IllegalArgumentException("Feature not accepted");
         };
     }
@@ -61,7 +57,6 @@ public class SpecialFeaturesConverter implements AttributeConverter<List<Special
             case COMMENTARIES -> "Commentaries";
             case DELETED_SCENES -> "Deleted Scenes";
             case BEHIND_THE_SCENES -> "Behind the Scenes";
-            //case null -> "";
         };
     }
 

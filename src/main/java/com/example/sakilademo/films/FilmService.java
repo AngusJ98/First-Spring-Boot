@@ -1,44 +1,41 @@
 package com.example.sakilademo.films;
 
 
-import com.example.sakilademo.actors.Actor;
+
 import com.example.sakilademo.actors.ActorRepository;
 import com.example.sakilademo.language.Language;
 import com.example.sakilademo.language.LanguageRepository;
 import com.example.sakilademo.utility.Utils;
-import com.example.sakilademo.validation.ValidationGroup;
+
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.BeanWrapper;
-import org.springframework.beans.BeanWrapperImpl;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+
 import org.springframework.web.server.ResponseStatusException;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import java.beans.PropertyDescriptor;
-
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+
 
 @Service
 @Transactional
 public class FilmService {
 
-    @Autowired
-    private FilmRepository filmRepository;
+    private final FilmRepository filmRepository;
+
+    private final LanguageRepository languageRepository;
+
+    private final ActorRepository actorRepository;
 
     @Autowired
-    private LanguageRepository languageRepository;
-    @Autowired
-    private ActorRepository actorRepository;
+    public FilmService(FilmRepository filmRepository, LanguageRepository languageRepository, ActorRepository actorRepository) {
+        this.filmRepository = filmRepository;
+        this.languageRepository = languageRepository;
+        this.actorRepository = actorRepository;
+    }
 
     public FilmResponse getFilmById(short id){
         Film film = filmRepository.findById(id);
@@ -96,9 +93,7 @@ public class FilmService {
                 film.getCast().add(actorRepository.findById(castId).orElseThrow(() ->new ResponseStatusException(HttpStatus.BAD_REQUEST, "Actor not found at ID: " + castId)));
             }
         }
-        FilmResponse response =  new FilmResponse(filmRepository.save(film));
-
-        return response;
+        return new FilmResponse(filmRepository.save(film));
     }
 
     public  FilmResponse patchFilm(short id, FilmInput filmData) {
@@ -114,8 +109,7 @@ public class FilmService {
 
         //TODO Write logic to copy cast and language and rating
 
-        FilmResponse response =  new FilmResponse(filmRepository.save(film));
-        return response;
+        return new FilmResponse(filmRepository.save(film));
 
     }
 
