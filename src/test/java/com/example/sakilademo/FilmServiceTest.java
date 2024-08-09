@@ -5,6 +5,7 @@ import com.example.sakilademo.films.*;
 import com.example.sakilademo.films.Film;
 import com.example.sakilademo.language.Language;
 import com.example.sakilademo.language.LanguageRepository;
+import io.cucumber.java.jv.Lan;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
@@ -18,6 +19,7 @@ import java.time.Year;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -38,6 +40,7 @@ class FilmServiceTest {
         Film example2 = new Film((short) 2, "test2!", "A Stunning Reflection of a Robot And a Moose who must Challenge a Woman in California", Year.of(2024), new Language(), new Language(), (short) 6, BigDecimal.valueOf(1), (short) 2, BigDecimal.valueOf(77), Rating.PG_13, List.of(SpecialFeature.BEHIND_THE_SCENES), LocalDateTime.now(),  List.of());
         doThrow(new EntityNotFoundException()).when(mockFilmRepo).findById(anyShort());
         doReturn(example).when(mockFilmRepo).findById((short) 1);
+        doReturn(Optional.of(new Language())).when(mockLanguageRepo).findById((short) 1);
         filmService = new FilmService(mockFilmRepo, mockLanguageRepo, mockActorRepo);
         when(mockFilmRepo.save(any())).thenAnswer(i -> i.getArguments()[0]);
         when(mockFilmRepo.findAll()).thenReturn(Arrays.asList(example, example2));
