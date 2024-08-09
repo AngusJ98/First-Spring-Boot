@@ -7,6 +7,7 @@ import com.example.sakilademo.language.Language;
 import com.example.sakilademo.language.LanguageRepository;
 import com.example.sakilademo.utility.Utils;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.BeanUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,10 +39,9 @@ public class FilmService {
     }
 
     public FilmResponse getFilmById(short id){
-        Film film = filmRepository.findById(id);
-        if (film != null) {
-            return new FilmResponse(film);
-        } else {
+        try {
+            return new FilmResponse(filmRepository.findById(id));
+        } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
 
@@ -52,17 +52,15 @@ public class FilmService {
     }
 
     public ResponseEntity<HttpStatus> deleteFilm(short id) {
-        Film film = filmRepository.findById(id);
-        if (film != null) {
-            try {
-                filmRepository.deleteById(id);
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            } catch (Exception e) {
-                //e.printStackTrace();
-                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        } else {
+
+        try {
+            filmRepository.deleteById(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (EntityNotFoundException e) {
+            //e.printStackTrace();
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

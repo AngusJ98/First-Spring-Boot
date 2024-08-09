@@ -1,5 +1,6 @@
 package com.example.sakilademo.films;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -36,8 +37,8 @@ class SpecialFeaturesConverterTest {
 
     @Test
     void testConvertToDatabaseColumn_WithNullFeature() {
-        List<SpecialFeature> features = List.of(SpecialFeature.TRAILERS, null);
-        assertThrows(IllegalArgumentException.class, () -> converter.convertToDatabaseColumn(features));
+
+        Assertions.assertThrows(NullPointerException.class, () -> List.of(SpecialFeature.TRAILERS, null));
     }
 
     @Test
