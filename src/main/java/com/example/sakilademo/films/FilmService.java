@@ -65,14 +65,19 @@ public class FilmService {
     }
 
     public FilmResponse updateFilm(short id, FilmInput filmData) {
-
-        Film film = filmRepository.findById(id);
-        if (film != null) {
-            BeanUtils.copyProperties(filmData, film);
-            return new FilmResponse(filmRepository.save(film));
-        } else {
+        try {
+            Film film = filmRepository.findById(id);
+            if (film != null) {
+                BeanUtils.copyProperties(filmData, film);
+                return new FilmResponse(filmRepository.save(film));
+            } else {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            }
+        }
+        catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
+
     }
 
 
