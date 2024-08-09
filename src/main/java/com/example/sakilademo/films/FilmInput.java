@@ -13,12 +13,15 @@ import jdk.jfr.Unsigned;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.math.BigDecimal;
 import java.time.Year;
 import java.util.List;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class FilmInput {
 
     @Size(min = 1, max = 128)

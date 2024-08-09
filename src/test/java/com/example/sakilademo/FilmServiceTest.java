@@ -26,12 +26,14 @@ import static org.mockito.Mockito.*;
 
 class FilmServiceTest {
     private FilmService filmService;
-
+    private FilmRepository mockFilmRepo;
+    private LanguageRepository mockLanguageRepo;
+    private ActorRepository mockActorRepo;
     @BeforeEach
     public void setup() {
-        final var mockFilmRepo = mock(FilmRepository.class);
-        final var mockLanguageRepo = mock(LanguageRepository.class);
-        final var mockActorRepo = mock(ActorRepository.class);
+        mockFilmRepo = mock(FilmRepository.class);
+        mockLanguageRepo = mock(LanguageRepository.class);
+        mockActorRepo = mock(ActorRepository.class);
         Film example = new Film((short) 1, "test1!", "A Stunning Reflection of a Robot And a Moose who must Challenge a Woman in California", Year.of(2024), new Language(), new Language(), (short) 6, BigDecimal.valueOf(1), (short) 2, BigDecimal.valueOf(77), Rating.PG_13, List.of(SpecialFeature.BEHIND_THE_SCENES), LocalDateTime.now(),  List.of());
         Film example2 = new Film((short) 2, "test2!", "A Stunning Reflection of a Robot And a Moose who must Challenge a Woman in California", Year.of(2024), new Language(), new Language(), (short) 6, BigDecimal.valueOf(1), (short) 2, BigDecimal.valueOf(77), Rating.PG_13, List.of(SpecialFeature.BEHIND_THE_SCENES), LocalDateTime.now(),  List.of());
         doThrow(new EntityNotFoundException()).when(mockFilmRepo).findById(anyShort());
@@ -76,13 +78,60 @@ class FilmServiceTest {
     @Test
     void updateFilm() {
 
+        FilmInput filmData = new FilmInput();
+        filmData.setTitle("Updated Title");
+        filmData.setDescription("Updated Description");
+
+        FilmResponse response = filmService.updateFilm((short) 1, filmData);
+
+        Assertions.assertNotNull(response);
+        Assertions.assertEquals("Updated Title", response.getTitle());
+        Assertions.assertEquals("Updated Description", response.getDescription());
+
+        verify(mockFilmRepo, times(1)).save(any(Film.class));
+    }
+
+    @Test
+    void updateNonexistentFilm() {
+        FilmInput filmData = new FilmInput();
+        filmData.setTitle("Updated Title");
+
+        Assertions.assertThrows(ResponseStatusException.class,
+                () -> filmService.updateFilm((short) 50000, filmData));
+
     }
 
     @Test
     void createFilm() {
+        FilmInput filmData = new FilmInput();
+        filmData.setTitle("New Film");
+        filmData.setDescription("A description for a new film");
+        filmData.setLanguageId((short) 1);
+
+        FilmResponse response = filmService.createFilm(filmData);
+
+        Assertions.assertNotNull(response);
+        Assertions.assertEquals("New Film", response.getTitle());
+        Assertions.assertEquals("A description for a new film", response.getDescription());
+
+        verify(mockFilmRepo, times(1)).save(any(Film.class));
     }
 
     @Test
     void patchFilm() {
+
+        FilmInput filmData = new FilmInput();
+        filmData.setTitle("Patched Title");
+
+        Film existingFilm = mockFilmRepo.findById((short) 1);
+
+        FilmResponse response = filmService.patchFilm((short) 1, filmData);
+
+        Assertions.assertNotNull(response);
+        Assertions.assertEquals("Patched Title", response.getTitle());
+
+        Assertions.assertEquals(existingFilm.getDescription(), response.getDescription());
+
+        verify(mockFilmRepo, times(1)).save(any(Film.class));
     }
 }
