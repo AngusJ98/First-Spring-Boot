@@ -1,7 +1,6 @@
 package com.example.sakilademo.actors;
 
 import com.example.sakilademo.validation.ValidationGroup;
-import lombok.AllArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

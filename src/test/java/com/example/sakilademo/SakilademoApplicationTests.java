@@ -24,7 +24,6 @@ class SakilademoApplicationTests {
 	@BeforeEach
 	public void setup() {
 		final var mockService = mock(ActorService.class);
-		//when(mockService.getOneActor((short) 1)).thenReturn(ResponseEntity.ok(new ActorResponse(new Actor((short) 1, "Fergus", "Bentley", new ArrayList<Film>()))));
 
 		doThrow(new ResponseStatusException(HttpStatus.NOT_FOUND)).when(mockService).getOneActor(anyShort());
 		doReturn(new ActorResponse(new Actor((short) 1, "Fergus", "Bentley", new ArrayList<>()))).when(mockService).getOneActor((short) 1);

@@ -2,7 +2,7 @@ package com.example.sakilademo.actors;
 
 import com.example.sakilademo.utility.Utils;
 import jakarta.persistence.EntityNotFoundException;
-import lombok.AllArgsConstructor;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

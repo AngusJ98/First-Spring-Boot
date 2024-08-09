@@ -23,7 +23,6 @@ public class SpecialFeaturesConverter implements AttributeConverter<List<Special
             }
         });
         List<String> strings =  specialFeatures.stream().map(this::stringFromEnum).toList();
-        //System.out.println(strings);
         if (strings.isEmpty()) {
             return "";
         }

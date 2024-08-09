@@ -3,12 +3,10 @@ package com.example.sakilademo;
 import com.example.sakilademo.actors.*;
 import com.example.sakilademo.films.Film;
 import jakarta.persistence.EntityNotFoundException;
-import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
@@ -99,7 +97,8 @@ class ActorServiceTests {
     void actorServiceTriesToUpdateNonExistentActor(){
         String firstName = "Bill";
         String lastName = "Williams";
+        ActorInput input = new ActorInput(firstName, lastName);
         Assertions.assertThrows(ResponseStatusException.class,
-                () -> actorService.updateActor(new ActorInput(firstName, lastName), (short)5100));
+                () -> actorService.updateActor(input, (short)5100));
     }
 }
